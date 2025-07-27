@@ -34,7 +34,7 @@ class AppState extends ChangeNotifier {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: [Introduction()]));
+    return Scaffold(body: Column(children: [Introduction(), Topics()]));
   }
 }
 
@@ -88,13 +88,27 @@ class Introduction extends StatelessWidget {
 class Topics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Topics')),
-      body: Center(
-        child: Text(
-          'Explore various topics related to mental health and well-being.',
-          textAlign: TextAlign.center,
-        ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Topic-Based Blog Spaces - r/Insomnia, r/ExamStress, r/HeartSpace & more",
+            style: GoogleFonts.notoSansGeorgian(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 16, 35, 63),
+            ),
+          ),
+          Text(
+            "Our blog section works likes themed Reddits, where you can find spaces that are focused on a specific mental health topic. Each section is focused on:",
+            style: GoogleFonts.inter(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 43, 45, 66),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -103,14 +117,6 @@ class Topics extends StatelessWidget {
 class Features extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Features')),
-      body: Center(
-        child: Text(
-          'Discover the features of Bloom Space that help you manage your mental health effectively.',
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+    return Center();
   }
 }
