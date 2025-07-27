@@ -1,16 +1,5 @@
-# bloom_space
+# TAMU Bloom Space
 
-A new Flutter project.
+BloomSpace is a mental health platform designed for ANM students. Whether you’re facing sleepless nights, clinical anxiety, or emotional burnout, this is a place to read, reflect, write, and connect — without pressure, without judgment.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Welcome to BloomSpace — Your Safe Space to Breathe and Be Heard
