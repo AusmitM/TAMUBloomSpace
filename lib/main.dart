@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,8 +16,8 @@ class MyApp extends StatelessWidget {
       create: (context) => AppState(),
       child: MaterialApp(
         title: 'Bloom Space',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
+        theme: new ThemeData(
+          scaffoldBackgroundColor: Color.fromARGB(255, 250, 250, 247),
         ),
         home: HomePage(),
       ),
@@ -45,12 +46,38 @@ class Introduction extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ElevatedButton(
-            // style: ElevatedButton.styleFrom(
-            //   backgroundColor: Color.fromARGB(0, 22, 60, 94),
-            // ),
-            onPressed: appState.printButton,
-            child: Text('Join the Community'),
+          Text(
+            "Welcome to BloomSpace - Your Safe Space to Breate and Be Heard",
+            style: GoogleFonts.notoSansGeorgian(
+              fontSize: 50,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 16, 35, 63),
+            ),
+          ),
+          Text(
+            "BloomSpace is a mental health platform designed for ANM students. Whether you're facing sleepless nights, clinical anxiety, or emotional burnout, this is a place to read, reflect, write, and connect - without pressure, no judgment.",
+            style: GoogleFonts.inter(
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 43, 45, 66),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                // style: ElevatedButton.styleFrom(
+                //   backgroundColor: Color.fromARGB(0, 22, 60, 94),
+                // ),
+                onPressed: appState.printButton,
+                child: Text('Join the Community'),
+              ),
+              SizedBox(width: 20),
+              ElevatedButton(
+                onPressed: appState.printButton,
+                child: Text('Explore Posts'),
+              ),
+            ],
           ),
         ],
       ),
