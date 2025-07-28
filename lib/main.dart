@@ -1,3 +1,4 @@
+import 'package:bulleted_list/bulleted_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -35,7 +36,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [Introduction(), SizedBox(height: 35), Topics()]),
+      body: Column(
+        children: [
+          Introduction(),
+          SizedBox(height: 35),
+          Topics(),
+          SizedBox(height: 35),
+        ],
+      ),
     );
   }
 }
@@ -51,7 +59,7 @@ class Introduction extends StatelessWidget {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 22.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Text(
                 "Welcome to BloomSpace - Your Safe Space to Breathe and Be Heard",
                 style: GoogleFonts.headlandOne(
@@ -117,12 +125,13 @@ class Introduction extends StatelessWidget {
 class Topics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var appState = context.watch<AppState>();
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Text(
               "Topic-Based Blog Spaces - r/Insomnia, r/ExamStress, r/HeartSpace & more",
               style: GoogleFonts.headlandOne(
@@ -142,6 +151,216 @@ class Topics extends StatelessWidget {
               ),
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '\u2022',
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            color: Color.fromARGB(255, 43, 45, 66),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Container(
+                          width: 220,
+                          child: Text(
+                            "Writing is externalized and processes emotions",
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '\u2022',
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            color: Color.fromARGB(255, 43, 45, 66),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Container(
+                          width: 220,
+                          child: Text(
+                            "Posts help you find people going through similar experiences",
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '\u2022',
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            color: Color.fromARGB(255, 43, 45, 66),
+                          ),
+                        ),
+                        SizedBox(width: 5),
+                        Container(
+                          width: 220,
+                          child: Text("Comment sections build connections"),
+                        ),
+                      ],
+                    ),
+
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        side: BorderSide(
+                          color: Color.fromARGB(255, 22, 60, 94),
+                          width: 1.5,
+                        ),
+                        foregroundColor: Color.fromARGB(255, 22, 60, 94),
+                        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 10,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                      ),
+                      onPressed: appState.printButton,
+                      child: Text('Explore All Blog Topics'),
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.circle,
+                          size: 12,
+                          color: Color.fromARGB(255, 255, 189, 46),
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          "r/Insomnia",
+                          style: GoogleFonts.inter(
+                            fontSize: 13,
+                            color: Color.fromARGB(255, 43, 45, 66),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 12,
+                            color: Color.fromARGB(255, 0, 153, 255),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "r/ExamStress",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 12,
+                            color: Color.fromARGB(255, 255, 82, 82),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "r/HeartSpace",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 12,
+                            color: Color.fromARGB(255, 0, 181, 120),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "r/FromTheField",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 12,
+                            color: Color.fromARGB(255, 229, 148, 0),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "r/Overwhelmed",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 12,
+                            color: Color.fromARGB(255, 139, 97, 225),
+                          ),
+                          SizedBox(width: 5),
+                          Text(
+                            "r/SmallWins",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -151,6 +370,42 @@ class Topics extends StatelessWidget {
 class Features extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Center();
+    return Center(
+      child: Row(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  "Featured Posts from the Community",
+                  style: GoogleFonts.headlandOne(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 16, 35, 63),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  right: 20.0,
+                  top: 10.0,
+                ),
+                child: Text(
+                  "Sometimes, a private conversation can change your world. BloomSpace connects you with one.",
+                  style: GoogleFonts.inter(
+                    fontSize: 13,
+                    color: Color.fromARGB(255, 43, 45, 66),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Placeholder(),
+        ],
+      ),
+    );
   }
 }
