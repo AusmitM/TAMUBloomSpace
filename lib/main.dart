@@ -34,7 +34,9 @@ class AppState extends ChangeNotifier {
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Column(children: [Introduction(), Topics()]));
+    return Scaffold(
+      body: Column(children: [Introduction(), SizedBox(height: 35), Topics()]),
+    );
   }
 }
 
@@ -119,20 +121,25 @@ class Topics extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            "Topic-Based Blog Spaces - r/Insomnia, r/ExamStress, r/HeartSpace & more",
-            style: GoogleFonts.notoSansGeorgian(
-              fontSize: 50,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 16, 35, 63),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 22.0),
+            child: Text(
+              "Topic-Based Blog Spaces - r/Insomnia, r/ExamStress, r/HeartSpace & more",
+              style: GoogleFonts.headlandOne(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 16, 35, 63),
+              ),
             ),
           ),
-          Text(
-            "Our blog section works likes themed Reddits, where you can find spaces that are focused on a specific mental health topic. Each section is focused on:",
-            style: GoogleFonts.inter(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 43, 45, 66),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            child: Text(
+              "Our blog section works likes themed Reddits, where you can find spaces that are focused on a specific mental health topic. Each section is focused on:",
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                color: Color.fromARGB(255, 43, 45, 66),
+              ),
             ),
           ),
         ],
