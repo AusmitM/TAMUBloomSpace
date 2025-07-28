@@ -47,39 +47,64 @@ class Introduction extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SafeArea(
+            bottom: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 22.0),
+              child: Text(
+                "Welcome to BloomSpace - Your Safe Space to Breathe and Be Heard",
+                style: GoogleFonts.headlandOne(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 16, 35, 63),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
             child: Text(
-              "Welcome to BloomSpace - Your Safe Space to Breathe and Be Heard",
-              style: GoogleFonts.headlandOne(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 16, 35, 63),
+              "BloomSpace is a mental health platform designed for ANM students. Whether you're facing sleepless nights, clinical anxiety, or emotional burnout, this is a place to read, reflect, write, and connect - without pressure, no judgment.",
+              style: GoogleFonts.inter(
+                fontSize: 13,
+                color: Color.fromARGB(255, 43, 45, 66),
               ),
             ),
           ),
-          Text(
-            "BloomSpace is a mental health platform designed for ANM students. Whether you're facing sleepless nights, clinical anxiety, or emotional burnout, this is a place to read, reflect, write, and connect - without pressure, no judgment.",
-            style: GoogleFonts.inter(
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 43, 45, 66),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            child: Row(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 22, 60, 94),
+                    foregroundColor: Color.fromARGB(255, 255, 255, 255),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onPressed: appState.printButton,
+                  child: Text('Join the Community'),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    side: BorderSide(
+                      color: Color.fromARGB(255, 22, 60, 94),
+                      width: 1.5,
+                    ),
+                    foregroundColor: Color.fromARGB(255, 22, 60, 94),
+                    backgroundColor: Color.fromARGB(255, 255, 255, 255),
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                  ),
+                  onPressed: appState.printButton,
+                  child: Text('Explore Posts'),
+                ),
+              ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                // style: ElevatedButton.styleFrom(
-                //   backgroundColor: Color.fromARGB(0, 22, 60, 94),
-                // ),
-                onPressed: appState.printButton,
-                child: Text('Join the Community'),
-              ),
-              SizedBox(width: 20),
-              ElevatedButton(
-                onPressed: appState.printButton,
-                child: Text('Explore Posts'),
-              ),
-            ],
           ),
         ],
       ),
