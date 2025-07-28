@@ -46,18 +46,20 @@ class Introduction extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            "Welcome to BloomSpace - Your Safe Space to Breate and Be Heard",
-            style: GoogleFonts.notoSansGeorgian(
-              fontSize: 50,
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 16, 35, 63),
+          SafeArea(
+            child: Text(
+              "Welcome to BloomSpace - Your Safe Space to Breathe and Be Heard",
+              style: GoogleFonts.headlandOne(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 16, 35, 63),
+              ),
             ),
           ),
           Text(
             "BloomSpace is a mental health platform designed for ANM students. Whether you're facing sleepless nights, clinical anxiety, or emotional burnout, this is a place to read, reflect, write, and connect - without pressure, no judgment.",
             style: GoogleFonts.inter(
-              fontSize: 30,
+              fontSize: 15,
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 43, 45, 66),
             ),
