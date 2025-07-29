@@ -389,16 +389,144 @@ class Features extends StatelessWidget {
               children: [
                 Column(
                   children: [
+                    SizedBox(height: 10),
                     Container(
-                      width: 230,
+                      width: 280,
                       child: Text(
                         "Sometimes, a private conversation can change your world. BloomSpace connects you with one.",
                       ),
                     ),
-                    Row(children: [Text("Col1"), Text("Col2"), Text("Col3")]),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Card(
+                          elevation: 2, // Optional: for shadow effect
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              8.0,
+                            ), // Adjust this value for desired roundness
+                          ),
+                          color: Color.fromARGB(255, 13, 50, 96),
+                          child: Container(
+                            width: 90,
+                            height: 170,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 25.0,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "A Private Conversation",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      color: Color.fromARGB(255, 255, 248, 226),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "Sometimes a private conversation can mean the world.",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 10,
+                                      color: Color.fromARGB(255, 255, 248, 226),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Card(
+                          elevation: 2, // Optional: for shadow effect
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              8.0,
+                            ), // Adjust this value for desired roundness
+                          ),
+                          color: Color.fromARGB(255, 106, 143, 212),
+                          child: Container(
+                            width: 90,
+                            height: 170,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 25.0,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Fully Anonymous",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "My BloomSpace connects you with one — anonymously.",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 10,
+                                      color: Color.fromARGB(255, 255, 255, 255),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Card(
+                          elevation: 2, // Optional: for shadow effect
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              8.0,
+                            ), // Adjust this value for desired roundness
+                          ),
+                          color: Color.fromARGB(255, 255, 248, 226),
+                          child: Container(
+                            width: 90,
+                            height: 170,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 25.0,
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    "Matched by Topic",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 13,
+                                      color: Color.fromARGB(255, 13, 50, 96),
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    "If you connect with a post — you can be matched by topic.",
+                                    textAlign: TextAlign.center,
+                                    style: GoogleFonts.inter(
+                                      fontSize: 10,
+                                      color: Color.fromARGB(255, 13, 50, 96),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                Text("Tools"),
+                Column(
+                  children: [
+                    Row(children: [Text("Emoji"), Text("Text")]),
+                    Row(children: [Text("Emoji"), Text("Text")]),
+                    Row(children: [Text("Emoji"), Text("Text")]),
+                  ],
+                ),
               ],
             ),
           ],
