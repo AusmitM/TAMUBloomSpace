@@ -42,6 +42,7 @@ class HomePage extends StatelessWidget {
           SizedBox(height: 35),
           Topics(),
           SizedBox(height: 35),
+          Features(),
         ],
       ),
     );
@@ -170,7 +171,7 @@ class Topics extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: 220,
+                          width: 230,
                           child: Text(
                             "Writing is externalized and processes emotions",
                           ),
@@ -189,7 +190,7 @@ class Topics extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: 220,
+                          width: 230,
                           child: Text(
                             "Posts help you find people going through similar experiences",
                           ),
@@ -208,7 +209,7 @@ class Topics extends StatelessWidget {
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: 220,
+                          width: 230,
                           child: Text("Comment sections build connections"),
                         ),
                       ],
@@ -371,40 +372,37 @@ class Features extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Row(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Text(
-                  "Featured Posts from the Community",
-                  style: GoogleFonts.headlandOne(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 16, 35, 63),
-                  ),
-                ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Featured Posts from the Community             ",
+              style: GoogleFonts.headlandOne(
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+                color: Color.fromARGB(255, 16, 35, 63),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 20.0,
-                  right: 20.0,
-                  top: 10.0,
+            ),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      width: 230,
+                      child: Text(
+                        "Sometimes, a private conversation can change your world. BloomSpace connects you with one.",
+                      ),
+                    ),
+                    Row(children: [Text("Col1"), Text("Col2"), Text("Col3")]),
+                  ],
                 ),
-                child: Text(
-                  "Sometimes, a private conversation can change your world. BloomSpace connects you with one.",
-                  style: GoogleFonts.inter(
-                    fontSize: 13,
-                    color: Color.fromARGB(255, 43, 45, 66),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Placeholder(),
-        ],
+                Text("Tools"),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
