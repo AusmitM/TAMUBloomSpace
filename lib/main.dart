@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:bulleted_list/bulleted_list.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -60,7 +63,7 @@ class Introduction extends StatelessWidget {
           SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 13.0),
               child: Text(
                 "Welcome to BloomSpace - Your Safe Space to Breathe and Be Heard",
                 style: GoogleFonts.headlandOne(
@@ -72,7 +75,7 @@ class Introduction extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            padding: const EdgeInsets.only(left: 13.0, right: 13.0, top: 10.0),
             child: Text(
               "BloomSpace is a mental health platform designed for ANM students. Whether you're facing sleepless nights, clinical anxiety, or emotional burnout, this is a place to read, reflect, write, and connect - without pressure, no judgment.",
               style: GoogleFonts.inter(
@@ -82,7 +85,7 @@ class Introduction extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            padding: const EdgeInsets.only(left: 13.0, right: 13.0, top: 10.0),
             child: Row(
               children: [
                 ElevatedButton(
@@ -132,7 +135,7 @@ class Topics extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            padding: const EdgeInsets.symmetric(horizontal: 13.0),
             child: Text(
               "Topic-Based Blog Spaces - r/Insomnia, r/ExamStress, r/HeartSpace & more",
               style: GoogleFonts.headlandOne(
@@ -143,7 +146,7 @@ class Topics extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            padding: const EdgeInsets.only(left: 13.0, right: 13.0, top: 10.0),
             child: Text(
               "Our blog section works likes themed Reddits, where you can find spaces that are focused on a specific mental health topic. Each section is focused on:",
               style: GoogleFonts.inter(
@@ -153,7 +156,7 @@ class Topics extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+            padding: const EdgeInsets.only(left: 13.0, right: 13.0, top: 10.0),
             child: Row(
               children: [
                 Column(
@@ -174,6 +177,10 @@ class Topics extends StatelessWidget {
                           width: 230,
                           child: Text(
                             "Writing is externalized and processes emotions",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
                           ),
                         ),
                       ],
@@ -193,6 +200,10 @@ class Topics extends StatelessWidget {
                           width: 230,
                           child: Text(
                             "Posts help you find people going through similar experiences",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
                           ),
                         ),
                       ],
@@ -210,7 +221,13 @@ class Topics extends StatelessWidget {
                         SizedBox(width: 5),
                         Container(
                           width: 230,
-                          child: Text("Comment sections build connections"),
+                          child: Text(
+                            "Comment sections build connections",
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -373,7 +390,7 @@ class Features extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 13),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -388,10 +405,11 @@ class Features extends StatelessWidget {
             Row(
               children: [
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 10),
                     Container(
-                      width: 280,
+                      width: 290,
                       child: Text(
                         "Sometimes, a private conversation can change your world. BloomSpace connects you with one.",
                       ),
@@ -409,7 +427,7 @@ class Features extends StatelessWidget {
                           color: Color.fromARGB(255, 13, 50, 96),
                           child: Container(
                             width: 90,
-                            height: 170,
+                            height: 150,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 25.0,
@@ -448,7 +466,7 @@ class Features extends StatelessWidget {
                           color: Color.fromARGB(255, 106, 143, 212),
                           child: Container(
                             width: 90,
-                            height: 170,
+                            height: 150,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 25.0,
@@ -487,7 +505,7 @@ class Features extends StatelessWidget {
                           color: Color.fromARGB(255, 255, 248, 226),
                           child: Container(
                             width: 90,
-                            height: 170,
+                            height: 150,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 25.0,
@@ -520,11 +538,73 @@ class Features extends StatelessWidget {
                     ),
                   ],
                 ),
+                SizedBox(width: 5),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(children: [Text("Emoji"), Text("Text")]),
-                    Row(children: [Text("Emoji"), Text("Text")]),
-                    Row(children: [Text("Emoji"), Text("Text")]),
+                    Row(
+                      children: [
+                        Icon(
+                          CupertinoIcons.smiley,
+                          size: 18,
+                          color: Color.fromARGB(255, 13, 50, 96),
+                        ),
+                        SizedBox(width: 2),
+                        Container(
+                          width: 65,
+                          child: Text(
+                            "Personal mood tracker",
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.refresh,
+                          size: 18,
+                          color: Color.fromARGB(255, 13, 20, 96),
+                        ),
+
+                        SizedBox(width: 2),
+                        Container(
+                          width: 65,
+                          child: Text(
+                            "Breathing exercises",
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.edit,
+                          size: 18,
+                          color: Color.fromARGB(255, 13, 20, 96),
+                        ),
+                        SizedBox(width: 2),
+                        Container(
+                          width: 65,
+                          child: Text(
+                            "Guided journaling",
+                            style: GoogleFonts.inter(
+                              fontSize: 11,
+                              color: Color.fromARGB(255, 43, 45, 66),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
