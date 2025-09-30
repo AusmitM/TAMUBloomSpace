@@ -1,4 +1,4 @@
-name: bloom_space
+name: BloomSpace
 description: "BloomSpace is a mental health platform designed for ANM students. Whether you’re facing sleepless nights, clinical anxiety, or emotional burnout, this is a place to read, reflect, write, and connect — without pressure, without judgment."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
