@@ -7,9 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  // Navigation handler - Replace '' with your page routes
   void _navigateTo(BuildContext context, String routeName) async {
-    // --- Handle external URLs ---
     if (routeName.startsWith('http://') || routeName.startsWith('https://')) {
       final Uri uri = Uri.parse(routeName);
 
@@ -17,18 +15,17 @@ class HomePage extends StatelessWidget {
         if (await canLaunchUrl(uri)) {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
         } else {
-          debugPrint('❌ Could not launch $routeName');
+          debugPrint('Could not launch $routeName');
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(SnackBar(content: Text('Could not open link')));
         }
       } catch (e) {
-        debugPrint('⚠️ Error launching URL: $e');
+        debugPrint('Error launching URL: $e');
       }
-      return; // stop here — don't navigate further
+      return;
     }
 
-    // --- Handle internal navigation ---
     if (ModalRoute.of(context)?.settings.name != routeName) {
       debugPrint('Navigating to: $routeName');
       Navigator.pushNamed(context, routeName);
