@@ -75,9 +75,10 @@ class Chat1_1Page extends StatelessWidget {
                     const SizedBox(width: 80),
                     _buildNavItem(context, 'Home', AppRoutes.home),
                     const SizedBox(width: 40),
-                    _buildNavItem(context, 'Community Space', AppRoutes.community),
+                    _buildNavItem(
+                        context, 'Community Space', AppRoutes.community),
                     const SizedBox(width: 40),
-                    _buildNavItem(context, '1-on-1 Chat', AppRoutes.chat1_1),
+                    // _buildNavItem(context, '1-on-1 Chat', AppRoutes.chat1_1),
                     const SizedBox(width: 40),
                     _buildNavItem(
                       context,
@@ -235,7 +236,8 @@ class Chat1_1Page extends StatelessWidget {
                           ListTile(
                             leading: const CircleAvatar(
                               backgroundColor: Color(0xFFE8F5E9),
-                              child: Icon(Icons.person, color: Color(0xFF6B9D7F)),
+                              child:
+                                  Icon(Icons.person, color: Color(0xFF6B9D7F)),
                             ),
                             title: const Text('TAMU Counselor'),
                             trailing: const Text(
@@ -303,7 +305,8 @@ class Chat1_1Page extends StatelessWidget {
                                                 '/peer-chat',
                                               );
                                             },
-                                            child: const Text('Start Peer Chat'),
+                                            child:
+                                                const Text('Start Peer Chat'),
                                           ),
                                           const SizedBox(width: 12),
                                           OutlinedButton(
@@ -365,7 +368,8 @@ class Chat1_1Page extends StatelessWidget {
                                   ),
                                   const SizedBox(width: 12),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         children: [
@@ -383,7 +387,8 @@ class Chat1_1Page extends StatelessWidget {
                                             ),
                                             decoration: BoxDecoration(
                                               color: Colors.grey[300],
-                                              borderRadius: BorderRadius.circular(
+                                              borderRadius:
+                                                  BorderRadius.circular(
                                                 12,
                                               ),
                                             ),
@@ -536,67 +541,68 @@ class Chat1_1Page extends StatelessWidget {
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Text(
+                                      'Please avoid sharing personal identifiers.\nAnonymous mode is on by default',
+                                      style: TextStyle(fontSize: 12),
+                                    ),
                                   ),
-                                  child: const Text(
-                                    'Please avoid sharing personal identifiers.\nAnonymous mode is on by default',
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                                const SizedBox(height: 12),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: TextField(
-                                        decoration: InputDecoration(
-                                          hintText: 'Share Resource use',
-                                          border: OutlineInputBorder(
+                                  const SizedBox(height: 12),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: TextField(
+                                          decoration: InputDecoration(
+                                            hintText: 'Share Resource use',
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                8,
+                                              ),
+                                            ),
+                                            filled: true,
+                                            fillColor: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.emoji_emotions_outlined,
+                                        ),
+                                        onPressed: () {
+                                          // Show emoji picker
+                                        },
+                                      ),
+                                      const SizedBox(width: 8),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // Send message
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: const Color(
+                                            0xFF6B9D7F,
+                                          ),
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 32,
+                                            vertical: 16,
+                                          ),
+                                          shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(
                                               8,
                                             ),
                                           ),
-                                          filled: true,
-                                          fillColor: Colors.white,
+                                        ),
+                                        child: const Text(
+                                          'Send',
+                                          style: TextStyle(color: Colors.white),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    IconButton(
-                                      icon: const Icon(
-                                        Icons.emoji_emotions_outlined,
-                                      ),
-                                      onPressed: () {
-                                        // Show emoji picker
-                                      },
-                                    ),
-                                    const SizedBox(width: 8),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // Send message
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: const Color(
-                                          0xFF6B9D7F,
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 32,
-                                          vertical: 16,
-                                        ),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            8,
-                                          ),
-                                        ),
-                                      ),
-                                      child: const Text(
-                                        'Send',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
                           ],
                         ),
                       ),
@@ -622,7 +628,8 @@ class Chat1_1Page extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF6B9D7F),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 16),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),

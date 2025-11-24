@@ -1,4 +1,6 @@
 import 'package:BloomSpace/features/common/widgets/bloom_logo.dart';
+import 'package:BloomSpace/routes/app_routes.dart';
+import 'package:BloomSpace/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -9,13 +11,162 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  final _authService = AuthService();
+  final _displayNameController = TextEditingController();
+  final _bioController = TextEditingController();
+
   bool hideActivity = true;
   bool showOnlineStatus = false;
   String selectedTab = 'Edit Profile';
   String selectedSidebarItem = 'Edit Profile';
+  bool _isLoading = true;
+  bool _isSaving = false;
+  List<Map<String, dynamic>> savedPosts = [];
+
+  Map<String, dynamic>? userProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserProfile();
+  }
+
+  @override
+  void dispose() {
+    _displayNameController.dispose();
+    _bioController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadUserProfile() async {
+    if (!mounted) return;
+    setState(() => _isLoading = true);
+
+    try {
+      final user = _authService.currentUser;
+      if (user == null) {
+        // Redirect to login if not authenticated
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, AppRoutes.login);
+          }
+        });
+        return;
+      }
+
+      // Get user profile
+      final profile = await _authService.getUserProfile(user.id);
+      if (profile != null && mounted) {
+        setState(() {
+          userProfile = profile;
+          _displayNameController.text = profile['display_name'] ?? '';
+          _bioController.text = profile['bio'] ?? '';
+          hideActivity = profile['hide_activity'] ?? true;
+          showOnlineStatus = profile['show_online_status'] ?? false;
+        });
+      }
+
+      // Get saved posts
+      final posts = await _authService.getSavedPosts(user.id);
+      if (mounted) {
+        setState(() {
+          savedPosts = posts;
+        });
+      }
+    } catch (e) {
+      // Show error after frame is built
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error loading profile: ${e.toString()}'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      });
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _saveProfile() async {
+    setState(() => _isSaving = true);
+
+    try {
+      final user = _authService.currentUser;
+      if (user == null) return;
+
+      await _authService.updateUserProfile(
+        userId: user.id,
+        displayName: _displayNameController.text.trim(),
+        bio: _bioController.text.trim(),
+        hideActivity: hideActivity,
+        showOnlineStatus: showOnlineStatus,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile updated successfully!'),
+            backgroundColor: Color(0xFF4A7C7C),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving profile: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
+  }
+
+  Future<void> _handleLogout() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await _authService.signOut();
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4A7C7C)),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -37,15 +188,17 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
         actions: [
-          _buildNavButton('Home', '/home'),
-          _buildNavButton('Community Space', '/community'),
-          _buildNavButton('1-on-1 Chat', '/chat'),
-          _buildNavButton('Counseling Services', '/counseling'),
-          _buildNavButton('Resources', '/resources'),
+          _buildNavButton('Home', AppRoutes.home),
+          _buildNavButton('Community Space', AppRoutes.community),
+          // _buildNavButton('1-on-1 Chat', AppRoutes.chat1_1),
+          _buildNavButton('Counseling Services', AppRoutes.counseling),
+          _buildNavButton('Resources', AppRoutes.resources),
           IconButton(
             icon: const Icon(Icons.search, color: Colors.black, size: 28),
             onPressed: () {
-              Navigator.pushNamed(context, '/search');
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Search feature coming soon!')),
+              );
             },
           ),
           const SizedBox(width: 16),
@@ -67,9 +220,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 Container(
                   width: 80,
                   height: 80,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
-                    color: const Color(0xFFB3D4CC),
+                    color: Color(0xFFB3D4CC),
                   ),
                   child: const Icon(
                     Icons.person,
@@ -78,12 +231,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Text(
-                    'Display Name',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    userProfile?['display_name'] ?? 'User',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
                     textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const SizedBox(height: 32),
@@ -152,6 +310,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 12),
                               TextField(
+                                controller: _displayNameController,
                                 decoration: InputDecoration(
                                   hintText: 'Display Name',
                                   hintStyle: TextStyle(
@@ -185,8 +344,9 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                               const SizedBox(height: 12),
                               TextField(
+                                enabled: false,
                                 decoration: InputDecoration(
-                                  hintText: 'Bio',
+                                  hintText: userProfile?['email'] ?? 'N/A',
                                   hintStyle: TextStyle(
                                     color: Colors.grey.shade600,
                                   ),
@@ -202,184 +362,188 @@ class _ProfilePageState extends State<ProfilePage> {
                                       color: Colors.grey.shade400,
                                     ),
                                   ),
+                                  disabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade300,
+                                    ),
+                                  ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                     vertical: 14,
                                   ),
+                                  filled: true,
+                                  fillColor: Colors.grey.shade100,
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+                              const Text(
+                                'Bio',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              TextField(
+                                controller: _bioController,
+                                maxLines: 4,
+                                decoration: InputDecoration(
+                                  hintText: 'Tell us a bit about yourself...',
+                                  hintStyle: TextStyle(
+                                    color: Colors.grey.shade600,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                    borderSide: BorderSide(
+                                      color: Colors.grey.shade400,
+                                    ),
+                                  ),
+                                  contentPadding: const EdgeInsets.all(16),
                                 ),
                               ),
                               const SizedBox(height: 40),
                               const Text(
-                                'Privacy & Safety',
+                                'Privacy',
                                 style: TextStyle(
                                   fontSize: 28,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const SizedBox(height: 24),
-                              const Text(
-                                'Allow 1-on-1 send 1 o-1 messages:',
-                                style: TextStyle(fontSize: 15),
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Container(
-                                    width: 250,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 4,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: Colors.grey.shade400,
-                                      ),
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: DropdownButton<String>(
-                                      value: 'Everyone',
-                                      isExpanded: true,
-                                      underline: Container(),
-                                      icon: const Icon(
-                                        Icons.keyboard_arrow_down,
-                                      ),
-                                      items:
-                                          ['Everyone', 'Friends Only', 'No One']
-                                              .map(
-                                                (e) => DropdownMenuItem(
-                                                  value: e,
-                                                  child: Text(e),
-                                                ),
-                                              )
-                                              .toList(),
-                                      onChanged: (value) {},
-                                    ),
-                                  ),
-                                  const SizedBox(width: 24),
-                                  Container(
-                                    width: 80,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: const Color(0xFFB3D4CC),
-                                    ),
-                                    child: const Icon(
-                                      Icons.person,
-                                      size: 50,
-                                      color: Color(0xFF5A9B8A),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/change-profile-picture',
-                                      );
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: const Color(0xFF5A9B8A),
-                                      foregroundColor: Colors.white,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 24,
-                                        vertical: 12,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    child: const Text(
-                                      'Change',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 20),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'Hide my activity',
-                                    style: TextStyle(fontSize: 15),
+                                  const Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Hide my activity',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                          'Others won\'t see your posts or comments',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Color(0xFF3B4C4C),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Switch(
                                     value: hideActivity,
                                     onChanged: (value) {
-                                      setState(() {
-                                        hideActivity = value;
-                                      });
+                                      setState(() => hideActivity = value);
                                     },
-                                    activeColor: Colors.white,
-                                    activeTrackColor: const Color(0xFF5A9B8A),
+                                    activeColor: const Color(0xFF5A9B8A),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 12),
+                              const Divider(height: 32),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
-                                    'Show my online status',
-                                    style: TextStyle(fontSize: 15),
+                                  const Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Show online status',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        SizedBox(height: 4),
+                                        Text(
+                                          'Let others see when you\'re online',
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            color: Color(0xFF3B4C4C),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                   Switch(
                                     value: showOnlineStatus,
                                     onChanged: (value) {
-                                      setState(() {
-                                        showOnlineStatus = value;
-                                      });
+                                      setState(() => showOnlineStatus = value);
                                     },
-                                    activeColor: Colors.white,
-                                    activeTrackColor: const Color(0xFF5A9B8A),
-                                    inactiveThumbColor: Colors.white,
-                                    inactiveTrackColor: Colors.grey.shade300,
+                                    activeColor: const Color(0xFF5A9B8A),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 24),
-                              InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/data-privacy');
-                                },
-                                child: Padding(
+                              const SizedBox(height: 40),
+                              // Save Button
+                              ElevatedButton(
+                                onPressed: _isSaving ? null : _saveProfile,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF4A7C7C),
+                                  foregroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(
-                                    vertical: 12.0,
+                                    horizontal: 32,
+                                    vertical: 16,
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Text(
-                                        'Data privacy',
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                      Icon(
-                                        Icons.chevron_right,
-                                        color: Colors.grey.shade700,
-                                      ),
-                                    ],
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
+                                child: _isSaving
+                                    ? const SizedBox(
+                                        height: 20,
+                                        width: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            Colors.white,
+                                          ),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Save Changes',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                               ),
-                              const SizedBox(height: 32),
+                              const SizedBox(height: 40),
                               Container(
                                 padding: const EdgeInsets.all(20),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFFF5F5F5),
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: const Color(0xFFFFF3E0),
+                                  border: Border.all(
+                                    color: const Color(0xFFFFB74D),
+                                  ),
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   children: [
                                     Icon(
-                                      Icons.eco_outlined,
-                                      color: const Color(0xFF7AB5A3),
+                                      Icons.phone,
+                                      color: Color(0xFFE65100),
                                       size: 28,
                                     ),
-                                    const SizedBox(width: 16),
-                                    const Text(
+                                    SizedBox(width: 16),
+                                    Text(
                                       'In a crisis? Call or text 988',
                                       style: TextStyle(
                                         fontSize: 16,
@@ -407,21 +571,27 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               ),
                               const SizedBox(height: 20),
-                              _buildSavedPost(),
-                              const SizedBox(height: 20),
-                              _buildSavedPost(),
-                              const SizedBox(height: 40),
-                              const Text(
-                                'Saved Posts',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              _buildSavedPost(),
-                              const SizedBox(height: 20),
-                              _buildSavedPost(),
+                              if (savedPosts.isEmpty)
+                                const Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(40.0),
+                                    child: Text(
+                                      'No saved posts yet',
+                                      style: TextStyle(
+                                        color: Color(0xFF3B4C4C),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              else
+                                ...savedPosts.map((post) {
+                                  return Column(
+                                    children: [
+                                      _buildSavedPost(post),
+                                      const SizedBox(height: 20),
+                                    ],
+                                  );
+                                }).toList(),
                             ],
                           ),
                         ),
@@ -468,19 +638,25 @@ class _ProfilePageState extends State<ProfilePage> {
               case 'Edit Profile':
                 break;
               case 'Saved Posts':
-                Navigator.pushNamed(context, '/saved-posts');
+                // Already on profile page, just highlight
                 break;
               case 'Privacy Settings':
-                Navigator.pushNamed(context, '/privacy-settings');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Privacy settings')),
+                );
                 break;
               case 'Notification Settings':
-                Navigator.pushNamed(context, '/notification-settings');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Notification settings')),
+                );
                 break;
               case 'Account':
-                Navigator.pushNamed(context, '/account');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Account settings')),
+                );
                 break;
               case 'Logout':
-                Navigator.pushNamed(context, '/logout');
+                _handleLogout();
                 break;
             }
           },
@@ -515,13 +691,19 @@ class _ProfilePageState extends State<ProfilePage> {
         });
         switch (label) {
           case 'Privacy & Safety':
-            Navigator.pushNamed(context, '/privacy-safety-tab');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Privacy & Safety tab')),
+            );
             break;
           case 'Notifications':
-            Navigator.pushNamed(context, '/notifications-tab');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Notifications tab')),
+            );
             break;
           case 'Saved Posts':
-            Navigator.pushNamed(context, '/saved-posts-tab');
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Saved Posts tab')),
+            );
             break;
         }
       },
@@ -550,10 +732,12 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildSavedPost() {
+  Widget _buildSavedPost(Map<String, dynamic> post) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/saved-post-detail');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Opening: ${post['post_title']}')),
+        );
       },
       child: Container(
         padding: const EdgeInsets.all(20),
@@ -565,22 +749,46 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'A title of a sa saved post',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    post['post_title'] ?? 'Untitled Post',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.delete_outline, size: 20),
+                  onPressed: () async {
+                    await _authService.removeSavedPost(post['id']);
+                    await _loadUserProfile();
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Post removed')),
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 12),
-            Container(
-              height: 3,
-              width: double.infinity,
-              color: Colors.grey.shade300,
-            ),
-            const SizedBox(height: 6),
-            Container(
-              height: 3,
-              width: double.infinity,
-              color: Colors.grey.shade300,
-            ),
+            if (post['post_content'] != null) ...[
+              const SizedBox(height: 12),
+              Text(
+                post['post_content'],
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade700,
+                ),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
           ],
         ),
       ),

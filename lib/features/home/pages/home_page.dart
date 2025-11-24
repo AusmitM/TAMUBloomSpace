@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget {
                 const SizedBox(width: 40),
                 _buildNavItem(context, 'Community Space', AppRoutes.community),
                 const SizedBox(width: 40),
-                _buildNavItem(context, '1-on-1 Chat', AppRoutes.chat1_1),
+                // _buildNavItem(context, '1-on-1 Chat', AppRoutes.chat1_1),
                 const SizedBox(width: 40),
                 _buildNavItem(
                   context,
@@ -198,21 +198,23 @@ class HomePage extends StatelessWidget {
                                                 ElevatedButton(
                                                   onPressed: () =>
                                                       _navigateTo(context, ''),
-                                                  style: ElevatedButton.styleFrom(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         const Color(0xFF4A7C7C),
                                                     foregroundColor:
                                                         Colors.white,
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 28,
-                                                          vertical: 14,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 28,
+                                                      vertical: 14,
+                                                    ),
+                                                    shape:
+                                                        RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                            8,
-                                                          ),
+                                                        8,
+                                                      ),
                                                     ),
                                                   ),
                                                   child: const Text(
@@ -228,21 +230,23 @@ class HomePage extends StatelessWidget {
                                                 ElevatedButton(
                                                   onPressed: () =>
                                                       _navigateTo(context, ''),
-                                                  style: ElevatedButton.styleFrom(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         Colors.white,
                                                     foregroundColor:
                                                         const Color(0xFF1E3A3A),
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 28,
-                                                          vertical: 14,
-                                                        ),
-                                                    shape: RoundedRectangleBorder(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 28,
+                                                      vertical: 14,
+                                                    ),
+                                                    shape:
+                                                        RoundedRectangleBorder(
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                            8,
-                                                          ),
+                                                        8,
+                                                      ),
                                                     ),
                                                   ),
                                                   child: const Text(
@@ -344,8 +348,8 @@ class HomePage extends StatelessWidget {
                                                 foregroundColor: Colors.white,
                                                 padding:
                                                     const EdgeInsets.symmetric(
-                                                      vertical: 14,
-                                                    ),
+                                                  vertical: 14,
+                                                ),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(8),
@@ -461,7 +465,8 @@ class HomePage extends StatelessWidget {
                                 Icons.favorite_border,
                                 'Counselling\nServices',
                                 'Find support and resources',
-                                AppRoutes.counseling, // Route for Counselling Services
+                                AppRoutes
+                                    .counseling, // Route for Counselling Services
                               ),
                             ),
                           ],
@@ -830,4 +835,3 @@ class SimpleFlowerPotPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-
