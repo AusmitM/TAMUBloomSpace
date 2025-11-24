@@ -1,3 +1,4 @@
+import 'package:BloomSpace/features/common/widgets/bloom_logo.dart';
 import 'package:BloomSpace/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -46,13 +47,8 @@ class HomePage extends StatelessWidget {
               children: [
                 // Logo and Brand
                 Row(
-                  children: [
-                    // Three-leaf logo icon
-                    Container(
-                      width: 36,
-                      height: 36,
-                      child: CustomPaint(painter: ThreeLeafLogoPainter()),
-                    ),
+                  children: const [
+                    BloomLogo(),
                     const SizedBox(width: 12),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,7 +62,7 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'for ANM students',
+                          'for TAMU students',
                           style: TextStyle(
                             fontSize: 11,
                             color: Color(0xFF1E3A3A),
@@ -88,7 +84,7 @@ class HomePage extends StatelessWidget {
                 _buildNavItem(
                   context,
                   'Counseling Services',
-                  'https://uhs.tamu.edu/mental-health/index.html',
+                  AppRoutes.counseling,
                 ),
                 const SizedBox(width: 40),
                 _buildNavItem(context, 'Resources', AppRoutes.resources),
@@ -372,7 +368,7 @@ class HomePage extends StatelessWidget {
                                     child: InkWell(
                                       onTap: () => _navigateTo(
                                         context,
-                                        'https://uhs.tamu.edu/mental-health/index.html',
+                                        AppRoutes.counseling,
                                       ),
                                       child: Container(
                                         width: 300,
@@ -465,7 +461,7 @@ class HomePage extends StatelessWidget {
                                 Icons.favorite_border,
                                 'Counselling\nServices',
                                 'Find support and resources',
-                                'https://uhs.tamu.edu/mental-health/index.html', // Route for Counselling Services
+                                AppRoutes.counseling, // Route for Counselling Services
                               ),
                             ),
                           ],
@@ -835,83 +831,3 @@ class SimpleFlowerPotPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-// Three-leaf logo painter for top left
-class ThreeLeafLogoPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFF4A7C7C)
-      ..style = PaintingStyle.fill;
-
-    // Draw three teardrop-shaped leaves arranged in a fan
-
-    // Left leaf
-    final leftLeafPath = Path()
-      ..moveTo(size.width * 0.5, size.height * 0.75)
-      ..quadraticBezierTo(
-        size.width * 0.15,
-        size.height * 0.6,
-        size.width * 0.2,
-        size.height * 0.25,
-      )
-      ..quadraticBezierTo(
-        size.width * 0.25,
-        size.height * 0.15,
-        size.width * 0.35,
-        size.height * 0.3,
-      )
-      ..quadraticBezierTo(
-        size.width * 0.4,
-        size.height * 0.5,
-        size.width * 0.5,
-        size.height * 0.75,
-      )
-      ..close();
-    canvas.drawPath(leftLeafPath, paint);
-
-    // Center leaf
-    final centerLeafPath = Path()
-      ..moveTo(size.width * 0.5, size.height * 0.75)
-      ..quadraticBezierTo(
-        size.width * 0.45,
-        size.height * 0.4,
-        size.width * 0.5,
-        size.height * 0.1,
-      )
-      ..quadraticBezierTo(
-        size.width * 0.55,
-        size.height * 0.4,
-        size.width * 0.5,
-        size.height * 0.75,
-      )
-      ..close();
-    canvas.drawPath(centerLeafPath, paint);
-
-    // Right leaf
-    final rightLeafPath = Path()
-      ..moveTo(size.width * 0.5, size.height * 0.75)
-      ..quadraticBezierTo(
-        size.width * 0.6,
-        size.height * 0.5,
-        size.width * 0.65,
-        size.height * 0.3,
-      )
-      ..quadraticBezierTo(
-        size.width * 0.75,
-        size.height * 0.15,
-        size.width * 0.8,
-        size.height * 0.25,
-      )
-      ..quadraticBezierTo(
-        size.width * 0.85,
-        size.height * 0.6,
-        size.width * 0.5,
-        size.height * 0.75,
-      )
-      ..close();
-    canvas.drawPath(rightLeafPath, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}

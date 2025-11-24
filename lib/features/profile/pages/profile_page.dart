@@ -1,3 +1,4 @@
+import 'package:BloomSpace/features/common/widgets/bloom_logo.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -21,13 +22,19 @@ class _ProfilePageState extends State<ProfilePage> {
         backgroundColor: Colors.white,
         elevation: 0,
         toolbarHeight: 70,
-        title: const Text(
-          'Bloom Space',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 28,
-            fontWeight: FontWeight.w400,
-          ),
+        title: const Row(
+          children: [
+            BloomLogo(size: 36),
+            SizedBox(width: 12),
+            Text(
+              'Bloom Space',
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 28,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
         ),
         actions: [
           _buildNavButton('Home', '/home'),
