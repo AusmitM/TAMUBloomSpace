@@ -80,7 +80,7 @@ class HomePage extends StatelessWidget {
                 _buildNavItem(context, 'Community Space', AppRoutes.community),
                 const SizedBox(width: 40),
                 // _buildNavItem(context, '1-on-1 Chat', AppRoutes.chat1_1),
-                const SizedBox(width: 40),
+                //const SizedBox(width: 40),
                 _buildNavItem(
                   context,
                   'Counseling Services',

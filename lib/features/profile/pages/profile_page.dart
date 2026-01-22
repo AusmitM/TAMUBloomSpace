@@ -4,7 +4,7 @@ import 'package:BloomSpace/services/auth_service.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -449,7 +449,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     onChanged: (value) {
                                       setState(() => hideActivity = value);
                                     },
-                                    activeColor: const Color(0xFF5A9B8A),
+                                    activeThumbColor: const Color(0xFF5A9B8A),
                                   ),
                                 ],
                               ),
@@ -486,7 +486,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     onChanged: (value) {
                                       setState(() => showOnlineStatus = value);
                                     },
-                                    activeColor: const Color(0xFF5A9B8A),
+                                    activeThumbColor: const Color(0xFF5A9B8A),
                                   ),
                                 ],
                               ),
@@ -591,7 +591,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       const SizedBox(height: 20),
                                     ],
                                   );
-                                }).toList(),
+                                }),
                             ],
                           ),
                         ),
@@ -644,20 +644,16 @@ class _ProfilePageState extends State<ProfilePage> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Privacy settings')),
                 );
-                break;
               case 'Notification Settings':
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Notification settings')),
                 );
-                break;
               case 'Account':
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text('Account settings')),
                 );
-                break;
               case 'Logout':
                 _handleLogout();
-                break;
             }
           },
           borderRadius: BorderRadius.circular(8),
@@ -694,17 +690,14 @@ class _ProfilePageState extends State<ProfilePage> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Privacy & Safety tab')),
             );
-            break;
           case 'Notifications':
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Notifications tab')),
             );
-            break;
           case 'Saved Posts':
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Saved Posts tab')),
             );
-            break;
         }
       },
       child: Padding(

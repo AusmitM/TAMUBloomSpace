@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CounselingPage extends StatelessWidget {
-  const CounselingPage({Key? key}) : super(key: key);
+  const CounselingPage({super.key});
 
   @override
   Widget build(BuildContext context) {

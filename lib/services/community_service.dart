@@ -26,8 +26,9 @@ class CommunityService {
             'content': content,
             'channel': channel,
             'upvotes': 0,
-            'created_at': DateTime.now().toIso8601String(),
-            'updated_at': DateTime.now().toIso8601String(),
+            // Store timestamps in UTC to avoid local offset issues (e.g., showing 6h ago)
+            'created_at': DateTime.now().toUtc().toIso8601String(),
+            'updated_at': DateTime.now().toUtc().toIso8601String(),
           })
           .select()
           .single();
@@ -51,11 +52,9 @@ class CommunityService {
         case 'new':
           orderColumn = 'created_at';
           ascending = false;
-          break;
         case 'top':
           orderColumn = 'upvotes';
           ascending = false;
-          break;
         case 'hot':
         default:
           orderColumn = 'created_at';
@@ -80,11 +79,7 @@ class CommunityService {
             .select('id, display_name')
             .inFilter('id', userIds);
 
-        final profiles = Map.fromIterable(
-          profilesResponse,
-          key: (profile) => profile['id'],
-          value: (profile) => profile,
-        );
+        final profiles = { for (var profile in profilesResponse) profile['id'] : profile };
 
         // Add profile data to posts
         for (var post in posts) {
@@ -112,11 +107,9 @@ class CommunityService {
         case 'new':
           orderColumn = 'created_at';
           ascending = false;
-          break;
         case 'top':
           orderColumn = 'upvotes';
           ascending = false;
-          break;
         case 'hot':
         default:
           orderColumn = 'created_at';
@@ -168,7 +161,8 @@ class CommunityService {
   }) async {
     try {
       final Map<String, dynamic> updates = {
-        'updated_at': DateTime.now().toIso8601String(),
+        // Keep updated_at in UTC for consistency
+        'updated_at': DateTime.now().toUtc().toIso8601String(),
       };
 
       if (title != null) updates['title'] = title;
@@ -303,7 +297,8 @@ class CommunityService {
             'parent_comment_id': parentCommentId,
             'content': content,
             'upvotes': 0,
-            'created_at': DateTime.now().toIso8601String(),
+            // Store comment timestamps in UTC to avoid timezone drift
+            'created_at': DateTime.now().toUtc().toIso8601String(),
           })
           .select()
           .single();
@@ -335,11 +330,7 @@ class CommunityService {
             .select('id, display_name')
             .inFilter('id', userIds);
 
-        final profiles = Map.fromIterable(
-          profilesResponse,
-          key: (profile) => profile['id'],
-          value: (profile) => profile,
-        );
+        final profiles = { for (var profile in profilesResponse) profile['id'] : profile };
 
         // Add profile data to comments
         for (var comment in comments) {

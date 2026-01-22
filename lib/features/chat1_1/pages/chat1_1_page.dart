@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Chat1_1Page extends StatelessWidget {
-  const Chat1_1Page({Key? key}) : super(key: key);
+  const Chat1_1Page({super.key});
 
   void _navigateTo(BuildContext context, String routeName) async {
     if (routeName.startsWith('http://') || routeName.startsWith('https://')) {

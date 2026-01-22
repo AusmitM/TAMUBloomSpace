@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommunityPage extends StatefulWidget {
-  const CommunityPage({Key? key}) : super(key: key);
+  const CommunityPage({super.key});
 
   @override
   State<CommunityPage> createState() => _CommunityPageState();
@@ -263,7 +263,7 @@ class _CommunityPageState extends State<CommunityPage> {
                 // Left Sidebar - Channels
                 Container(
                   width: 240,
-                  color: const Color(0xFFF5F3E8),
+                  color: const Color(0xFFD4E4D7),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -482,6 +482,8 @@ class _CommunityPageState extends State<CommunityPage> {
     final String content = post['content'] ?? '';
     final int upvotes = post['upvotes'] ?? 0;
     final String authorName = post['profiles']?['display_name'] ?? 'Anonymous';
+    final bool isOwner = _authService.currentUser?.id == post['user_id'];
+    //final bool isOwner = _authService.currentUser?.id == post['user_id'];
 
     // Parse the timestamp safely
     final String createdAtStr = post['created_at'];
@@ -504,7 +506,7 @@ class _CommunityPageState extends State<CommunityPage> {
       } else {
         // Format: "2025-11-24 14:45:01.489173" (no timezone indicator)
         // Add Z to treat as UTC
-        createdAt = DateTime.parse(createdAtStr + 'Z');
+        createdAt = DateTime.parse('${createdAtStr}Z');
       }
     } catch (e) {
       print('Error parsing timestamp: $createdAtStr - $e');
@@ -515,7 +517,7 @@ class _CommunityPageState extends State<CommunityPage> {
     final String timeAgo = _getTimeAgo(createdAt);
 
     // Note: comment count requires separate query, showing as 0 for now
-    final int commentCount = 0;
+    const int commentCount = 0;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -659,6 +661,20 @@ class _CommunityPageState extends State<CommunityPage> {
                             color: Colors.grey.shade600,
                           ),
                         ),
+                        const Spacer(),
+                        if (isOwner)
+                          IconButton(
+                            tooltip: 'Delete post',
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                            icon: const Icon(
+                              Icons.delete_outline,
+                              color: Colors.redAccent,
+                              size: 20,
+                            ),
+                            onPressed: () =>
+                                _confirmDeletePost(context, postId),
+                          ),
                       ],
                     ),
                   ],
@@ -673,8 +689,8 @@ class _CommunityPageState extends State<CommunityPage> {
 
   String _getTimeAgo(DateTime dateTime) {
     // Calculate difference between now and post time (both in UTC)
-    final now = DateTime.now();
-    final postTime = dateTime;
+    final now = DateTime.now().toUtc();
+    final postTime = dateTime.toUtc();
     final difference = now.difference(postTime);
 
     print('=== TIME CALCULATION ===');
@@ -699,13 +715,81 @@ class _CommunityPageState extends State<CommunityPage> {
       return 'Just now';
     }
   }
+
+  Future<void> _confirmDeletePost(
+    BuildContext context,
+    String postId,
+  ) async {
+    if (!_authService.isLoggedIn) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please log in to delete your post')),
+      );
+      return;
+    }
+
+    final Map<String, dynamic> post = posts.firstWhere(
+      (p) => p['id'] == postId,
+      orElse: () => <String, dynamic>{},
+    );
+    final ownerId = post['user_id'];
+    if (ownerId == null || ownerId != _authService.currentUser?.id) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('You can only delete your own post')),
+      );
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete post?'),
+        content: const Text(
+          'This will permanently remove the post and its comments.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await _communityService.deletePost(postId);
+      await _loadPosts();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Post deleted')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error deleting post: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
 }
 
 // Post Detail Page (separate file recommended)
 class PostDetailPage extends StatefulWidget {
   final String postId;
 
-  const PostDetailPage({Key? key, required this.postId}) : super(key: key);
+  const PostDetailPage({super.key, required this.postId});
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
@@ -730,6 +814,52 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void dispose() {
     _commentController.dispose();
     super.dispose();
+  }
+
+  Future<void> _confirmDeleteCurrentPost() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Delete post?'),
+        content: const Text(
+          'This will permanently remove the post and its comments.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true) return;
+
+    try {
+      await _communityService.deletePost(widget.postId);
+      if (mounted) {
+        Navigator.of(context).pop(true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Post deleted')),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error deleting post: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   Future<void> _loadPostAndComments() async {
@@ -815,6 +945,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final String content = post!['content'] ?? '';
     final int upvotes = post!['upvotes'] ?? 0;
     final String authorName = post!['profiles']?['display_name'] ?? 'Anonymous';
+    final bool isOwner = _authService.currentUser?.id == post!['user_id'];
 
     // Parse timestamp safely
     final String createdAtStr = post!['created_at'];
@@ -827,7 +958,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       } else if (createdAtStr.endsWith('Z')) {
         createdAt = DateTime.parse(createdAtStr);
       } else {
-        createdAt = DateTime.parse(createdAtStr + 'Z');
+        createdAt = DateTime.parse('${createdAtStr}Z');
       }
     } catch (e) {
       print('Error parsing timestamp: $createdAtStr - $e');
@@ -841,6 +972,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
         foregroundColor: const Color(0xFF1E3A3A),
         elevation: 0.5,
         title: const Text('Post Details'),
+        actions: [
+          if (isOwner)
+            IconButton(
+              tooltip: 'Delete post',
+              icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+              onPressed: _confirmDeleteCurrentPost,
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -1015,7 +1154,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
       } else if (createdAtStr.endsWith('Z')) {
         createdAt = DateTime.parse(createdAtStr);
       } else {
-        createdAt = DateTime.parse(createdAtStr + 'Z');
+        createdAt = DateTime.parse('${createdAtStr}Z');
       }
     } catch (e) {
       print('Error parsing comment timestamp: $createdAtStr - $e');
